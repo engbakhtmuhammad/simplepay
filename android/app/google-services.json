@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "821220114977",
+    "project_id": "simplepay-1",
+    "storage_bucket": "simplepay-1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:821220114977:android:aba9ed3a1cf91479489960",
+        "android_client_info": {
+          "package_name": "com.example.simplepay"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCi7nIlIHUKPTfB-x_LLMQe9Mi7wPuWb7w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
