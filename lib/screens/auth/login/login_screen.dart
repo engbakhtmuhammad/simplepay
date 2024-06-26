@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:simplepay/screens/auth/verify.dart';
 import 'package:simplepay/widgets/custom_btn.dart';
 import 'package:the_apple_sign_in/the_apple_sign_in.dart' as apple;
 
@@ -45,7 +46,7 @@ class _LoginScreen extends State<LoginScreen> {
                   if (state.authState == AuthState.authenticated) {
                     if (!mounted) return;
                     pushAndRemoveUntil(
-                        context, HomeScreen(user: state.user!), false);
+                        context, VerifyScreen(user: state.user!), false);
                   } else {
                     if (!mounted) return;
                     showSnackBar(context,

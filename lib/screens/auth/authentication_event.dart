@@ -34,13 +34,13 @@ class SignupWithEmailAndPasswordEvent extends AuthenticationEvent {
   Uint8List? imageData;
   String? firstName;
   String? lastName;
-  String? phoneNumber;
+  String phoneNumber;
 
   SignupWithEmailAndPasswordEvent(
       {required this.emailAddress,
       required this.password,
       this.imageData,
-      this.phoneNumber,
+      required this.phoneNumber,
       this.firstName = 'Anonymous',
       this.lastName = 'User'});
 }

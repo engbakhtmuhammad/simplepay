@@ -149,6 +149,7 @@ class FireStoreUtils {
       {required String emailAddress,
       required String password,
       Uint8List? imageData,
+      required String phoneNumber,
       firstName = 'Anonymous',
       lastName = 'User'}) async {
     try {
@@ -166,6 +167,7 @@ class FireStoreUtils {
           firstName: firstName,
           userID: result.user?.uid ?? '',
           lastName: lastName,
+          phoneNumber: phoneNumber!,
           profilePictureURL: profilePicUrl);
       String? errorMessage = await createNewUser(user);
       if (errorMessage == null) {

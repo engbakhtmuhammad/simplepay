@@ -97,7 +97,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                       controller: pageController,
                       count: widget.titles.length,
                       effect: ScrollingDotsEffect(
-                          activeDotColor: colorPrimary,
+                          activeDotColor: colorSecondary,
                           dotColor: colorGrey.withOpacity(.5),
                           dotWidth: 8,
                           dotHeight: 8,
@@ -142,7 +142,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
         Text(
           widget.title.toUpperCase(),
           style: const TextStyle(
-              color: colorPrimary, fontSize: 18.0, fontWeight: FontWeight.bold),
+              color: colorSecondary, fontSize: 18.0, fontWeight: FontWeight.bold),
           textAlign: TextAlign.center,
         ),
         Padding(

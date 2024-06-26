@@ -96,6 +96,7 @@ class AuthenticationBloc
           emailAddress: event.emailAddress,
           password: event.password,
           imageData: event.imageData,
+          phoneNumber: event.phoneNumber!,
           firstName: event.firstName,
           lastName: event.lastName);
       if (result != null && result is User) {

@@ -69,7 +69,7 @@ class _SignUpState extends State<SignUpScreen> {
                             imageData: _imageData,
                             lastName: lastName,
                             firstName: firstName,
-                            phoneNumber: phone
+                            phoneNumber: phone!
                             ));
                   } else if (state is SignUpFailureState) {
                     showSnackBar(context, state.errorMessage);

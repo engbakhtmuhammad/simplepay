@@ -21,5 +21,5 @@ final List<dynamic> imageList = [
   'assets/images/cash.png',
   'assets/images/work.png',
   'assets/images/wallet.png',
-  'assets/icons/simplepay.png',
+  'assets/images/simplepay.png',
 ];
