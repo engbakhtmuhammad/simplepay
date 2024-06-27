@@ -80,7 +80,7 @@ class _VerifyScreenState extends State<VerifyScreen> {
                   ),
                   const SizedBox(height: 10),
                   Text(
-                    "We need to verify your phone\n+ ${widget.user.phoneNumber}",
+                    "We need to verify your phone\n${widget.user.phoneNumber}",
                     style: TextStyle(fontSize: 16, color: colorGrey),
                     textAlign: TextAlign.center,
                   ),
