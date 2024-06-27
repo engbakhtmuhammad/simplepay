@@ -36,13 +36,14 @@ class SignupWithEmailAndPasswordEvent extends AuthenticationEvent {
   String? lastName;
   String phoneNumber;
 
-  SignupWithEmailAndPasswordEvent(
-      {required this.emailAddress,
-      required this.password,
-      this.imageData,
-      required this.phoneNumber,
-      this.firstName = 'Anonymous',
-      this.lastName = 'User'});
+  SignupWithEmailAndPasswordEvent({
+    required this.emailAddress,
+    required this.password,
+    this.imageData,
+    required this.phoneNumber,
+    this.firstName = 'Anonymous',
+    this.lastName = 'User',
+  });
 }
 
 class LogoutEvent extends AuthenticationEvent {
@@ -52,3 +53,15 @@ class LogoutEvent extends AuthenticationEvent {
 class FinishedOnBoardingEvent extends AuthenticationEvent {}
 
 class CheckFirstRunEvent extends AuthenticationEvent {}
+
+class SendOTPEvent extends AuthenticationEvent {
+  final String phoneNumber;
+
+  SendOTPEvent(this.phoneNumber);
+}
+
+class VerifyOTPEvent extends AuthenticationEvent {
+  final String otp;
+
+  VerifyOTPEvent({required this.otp});
+}

@@ -35,26 +35,26 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.6
-  firebase_core: ^2.1.1
-  firebase_auth: ^4.1.1
-  cloud_firestore: ^4.0.4
-  firebase_storage: ^11.0.4
+  firebase_core: ^3.1.1
+  firebase_auth: ^5.1.1
+  cloud_firestore: ^5.0.2
+  firebase_storage: ^12.1.0
 
   shared_preferences: ^2.0.15
   progress_dialog:
     git:
       url: https://github.com/mostafaAbdelazim/progress_dialog.git
-  flutter_facebook_auth: ^5.0.6
-  http: ^0.13.5
-  image_picker: ^0.8.6
+  flutter_facebook_auth: ^7.0.1
+  http: ^1.2.1
+  image_picker: ^1.1.2
   cached_network_image: ^3.2.2
   smooth_page_indicator: ^1.0.0+2
   the_apple_sign_in: ^1.1.1
   bloc: ^8.1.0
   flutter_bloc: ^8.1.1
   url_launcher: ^6.1.6
-  file_picker: ^5.2.2
-  pinput: ^2.2.12
+  file_picker: ^8.0.5
+  pinput: ^5.0.0
 
 dev_dependencies:
   flutter_test:
@@ -65,8 +65,8 @@ dev_dependencies:
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^3.0.0
-  flutter_launcher_icons: ^0.10.0
+  flutter_lints: ^4.0.0
+  flutter_launcher_icons: ^0.13.1
 
 flutter_icons:
   android: false

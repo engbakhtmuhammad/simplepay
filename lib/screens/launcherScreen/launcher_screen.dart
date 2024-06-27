@@ -26,24 +26,28 @@ class _LauncherScreenState extends State<LauncherScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor:  colorPrimary,
+      backgroundColor: colorPrimary,
       body: BlocListener<AuthenticationBloc, AuthenticationState>(
         listener: (context, state) {
           switch (state.authState) {
             case AuthState.firstRun:
               pushReplacement(
-                  context,
-                  OnBoardingScreen(
-                    images: imageList,
-                    titles: titlesList,
-                    subtitles: subtitlesList,
-                  ));
+                context,
+                OnBoardingScreen(
+                  images: imageList,
+                  titles: titlesList,
+                  subtitles: subtitlesList,
+                ),
+              );
               break;
             case AuthState.authenticated:
               pushReplacement(context, HomeScreen(user: state.user!));
               break;
             case AuthState.unauthenticated:
               pushReplacement(context, const WelcomeScreen());
+              break;
+            default:
+              // Handle any additional states or do nothing
               break;
           }
         },

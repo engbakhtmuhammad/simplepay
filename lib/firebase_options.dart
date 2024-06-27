@@ -41,46 +41,47 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyAzCm65rndFOoVraH5zc5G8JhwTIHQVbJA',
-    appId: '1:821220114977:web:ce82710b7e8de8b6489960',
-    messagingSenderId: '821220114977',
-    projectId: 'simplepay-1',
-    authDomain: 'simplepay-1.firebaseapp.com',
-    storageBucket: 'simplepay-1.appspot.com',
+    apiKey: 'AIzaSyBOBnpgG87IWAzziGmiNBZ1iPfyq-gDndU',
+    appId: '1:894953683674:web:c9d4b2f1f15f9116d383e3',
+    messagingSenderId: '894953683674',
+    projectId: 'simplepay-2',
+    authDomain: 'simplepay-2.firebaseapp.com',
+    storageBucket: 'simplepay-2.appspot.com',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyCi7nIlIHUKPTfB-x_LLMQe9Mi7wPuWb7w',
-    appId: '1:821220114977:android:aba9ed3a1cf91479489960',
-    messagingSenderId: '821220114977',
-    projectId: 'simplepay-1',
-    storageBucket: 'simplepay-1.appspot.com',
+    apiKey: 'AIzaSyABIaZv4cKkwZHXuxI-nt1-sf7QUIC9a00',
+    appId: '1:894953683674:android:ae0ac9812d962aa4d383e3',
+    messagingSenderId: '894953683674',
+    projectId: 'simplepay-2',
+    storageBucket: 'simplepay-2.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyAnccU_T2kiH4K6jApBWm92s7mmzXmDp-E',
-    appId: '1:821220114977:ios:a35b7d0c57460396489960',
-    messagingSenderId: '821220114977',
-    projectId: 'simplepay-1',
-    storageBucket: 'simplepay-1.appspot.com',
+    apiKey: 'AIzaSyAkfS4Hq65Vzq1D0V93gzzZ_3Vt8vfqAuI',
+    appId: '1:894953683674:ios:d08cc4fbbb1f5527d383e3',
+    messagingSenderId: '894953683674',
+    projectId: 'simplepay-2',
+    storageBucket: 'simplepay-2.appspot.com',
     iosBundleId: 'com.example.simplepay',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyAnccU_T2kiH4K6jApBWm92s7mmzXmDp-E',
-    appId: '1:821220114977:ios:a35b7d0c57460396489960',
-    messagingSenderId: '821220114977',
-    projectId: 'simplepay-1',
-    storageBucket: 'simplepay-1.appspot.com',
+    apiKey: 'AIzaSyAkfS4Hq65Vzq1D0V93gzzZ_3Vt8vfqAuI',
+    appId: '1:894953683674:ios:d08cc4fbbb1f5527d383e3',
+    messagingSenderId: '894953683674',
+    projectId: 'simplepay-2',
+    storageBucket: 'simplepay-2.appspot.com',
     iosBundleId: 'com.example.simplepay',
   );
 
   static const FirebaseOptions windows = FirebaseOptions(
-    apiKey: 'AIzaSyAzCm65rndFOoVraH5zc5G8JhwTIHQVbJA',
-    appId: '1:821220114977:web:00c9ba8c6398c4d2489960',
-    messagingSenderId: '821220114977',
-    projectId: 'simplepay-1',
-    authDomain: 'simplepay-1.firebaseapp.com',
-    storageBucket: 'simplepay-1.appspot.com',
+    apiKey: 'AIzaSyBOBnpgG87IWAzziGmiNBZ1iPfyq-gDndU',
+    appId: '1:894953683674:web:20d1391ae1cfceffd383e3',
+    messagingSenderId: '894953683674',
+    projectId: 'simplepay-2',
+    authDomain: 'simplepay-2.firebaseapp.com',
+    storageBucket: 'simplepay-2.appspot.com',
   );
+
 }
