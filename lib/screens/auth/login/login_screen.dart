@@ -33,6 +33,7 @@ class _LoginScreen extends State<LoginScreen> {
       child: Builder(builder: (context) {
         return Scaffold(
           appBar: AppBar(
+            title: Text(''),
             backgroundColor: Colors.transparent,
             iconTheme: IconThemeData(
                 color: isDarkMode(context) ? Colors.white : Colors.black),
@@ -83,54 +84,41 @@ class _LoginScreen extends State<LoginScreen> {
                     key: _key,
                     autovalidateMode: _validate,
                     child: SingleChildScrollView(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Image.asset(
-                            'assets/images/login.png',
-                            width: 300,
-                            height: 300,
-                            fit: BoxFit.cover,
-                          ),
-                          const SizedBox(height: 40),
-                          // const Padding(
-                          //   padding: EdgeInsets.symmetric(vertical: 10),
-                          //   child: Text(
-                          //     'Log in to your account',
-                          //     style: TextStyle(
-                          //         color: colorPrimary,
-                          //         fontSize: 25.0,
-                          //         fontWeight: FontWeight.bold),
-                          //   ),
-                          // ),
-                          Padding(
-                            padding: const EdgeInsets.only(
-                                top: 32.0, right: 24.0, left: 24.0),
-                            child: TextFormField(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 24, vertical: 40),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Image.asset(
+                              'assets/images/login.png',
+                              width: 300,
+                              height: 300,
+                              fit: BoxFit.cover,
+                            ),
+                            const SizedBox(height: 40),
+                            TextFormField(
                                 textAlignVertical: TextAlignVertical.center,
                                 textInputAction: TextInputAction.next,
                                 validator: validateEmail,
                                 onSaved: (String? val) {
                                   email = val;
                                 },
-                                style: const TextStyle(fontSize: 14.0),
+                                style:  TextStyle(fontSize: 14.0,color: isDarkMode(context)?colorPrimaryLight:colorSecondary),
                                 keyboardType: TextInputType.emailAddress,
                                 cursorColor: colorPrimary,
                                 decoration: getInputDecoration(
                                     hint: 'Email Address',
-                                    prefixIcon: Icon(
+                                    prefixIcon: const Icon(
                                       Icons.mail,
-                                      color: isDarkMode(context)
-                                          ? Colors.white
-                                          : colorSecondary,
                                     ),
                                     darkMode: isDarkMode(context),
-                                    errorColor: Theme.of(context).errorColor)),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(
-                                top: 32.0, right: 24.0, left: 24.0),
-                            child: TextFormField(
+                                    errorColor: Theme.of(context).errorColor,
+                                    context: context)),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            TextFormField(
                               textAlignVertical: TextAlignVertical.center,
                               obscureText: true,
                               validator: validatePassword,
@@ -141,98 +129,101 @@ class _LoginScreen extends State<LoginScreen> {
                                   .read<LoginBloc>()
                                   .add(ValidateLoginFieldsEvent(_key)),
                               textInputAction: TextInputAction.done,
-                              style: const TextStyle(fontSize: 14.0),
+                              style:  TextStyle(fontSize: 14.0,color: isDarkMode(context)?colorPrimaryLight:colorSecondary),
                               cursorColor: colorPrimary,
                               decoration: getInputDecoration(
                                 hint: 'Password',
                                 darkMode: isDarkMode(context),
                                 errorColor: Theme.of(context).errorColor,
-                                prefixIcon: Icon(
+                                prefixIcon: const Icon(
                                   Icons.lock,
-                                  color: isDarkMode(context)
-                                      ? Colors.white
-                                      : colorSecondary,
                                 ),
+                                context: context,
                               ),
                             ),
-                          ),
-                  
-                          /// forgot password text, navigates user to ResetPasswordScreen
-                          /// and this is only visible when logging with email and password
-                          ConstrainedBox(
-                            constraints: const BoxConstraints(
-                                maxWidth: 720, minWidth: 200),
-                            child: Padding(
-                              padding: const EdgeInsets.only(top: 16, right: 24),
-                              child: Align(
-                                alignment: Alignment.centerRight,
-                                child: GestureDetector(
-                                  onTap: () =>
-                                      push(context, const ResetPasswordScreen()),
-                                  child: const Text(
-                                    'Forgot password?',
-                                    style: TextStyle(
-                                        color: colorGrey,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 15,
-                                        letterSpacing: 1),
+
+                            /// forgot password text, navigates user to ResetPasswordScreen
+                            /// and this is only visible when logging with email and password
+                            ConstrainedBox(
+                              constraints: const BoxConstraints(
+                                  maxWidth: 720, minWidth: 200),
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.only(top: 16, right: 24),
+                                child: Align(
+                                  alignment: Alignment.centerRight,
+                                  child: GestureDetector(
+                                    onTap: () => push(
+                                        context, const ResetPasswordScreen()),
+                                    child: const Text(
+                                      'Forgot password?',
+                                      style: TextStyle(
+                                          color: colorGrey,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 15,
+                                          letterSpacing: 1),
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
-                          ),
-                  
-                          Padding(
-                            padding: const EdgeInsets.only(top: 20,bottom: 40),
-                            child: customBtn(
-                              text: "Login",
-                              onPressed: () => context
-                                  .read<LoginBloc>()
-                                  .add(ValidateLoginFieldsEvent(_key)),
+
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(top: 20),
+                              child: CustomBtn(
+                                text: "Login",
+                                onPressed: () => context
+                                    .read<LoginBloc>()
+                                    .add(ValidateLoginFieldsEvent(_key)),
+                              ),
                             ),
-                          ),
-                          FutureBuilder<bool>(
-                            future: apple.TheAppleSignIn.isAvailable(),
-                            builder: (context, snapshot) {
-                              if (snapshot.connectionState ==
-                                  ConnectionState.waiting) {
-                                return const CircularProgressIndicator.adaptive();
-                              }
-                              if (!snapshot.hasData || (snapshot.data != true)) {
-                                return Container();
-                              } else {
-                                return Padding(
-                                  padding: const EdgeInsets.only(
-                                      right: 40.0, left: 40.0, bottom: 20),
-                                  child: ConstrainedBox(
-                                    constraints: BoxConstraints(
-                                        maxWidth:
-                                            MediaQuery.of(context).size.width /
-                                                1.5),
-                                    child: apple.AppleSignInButton(
-                                        cornerRadius: 25.0,
-                                        type: apple.ButtonType.signIn,
-                                        style: isDarkMode(context)
-                                            ? apple.ButtonStyle.white
-                                            : apple.ButtonStyle.black,
-                                        onPressed: () async {
-                                          await context
-                                              .read<LoadingCubit>()
-                                              .showLoading(
-                                                  context,
-                                                  'Logging in, Please wait...',
-                                                  false);
-                                          if (!mounted) return;
-                                          context
-                                              .read<AuthenticationBloc>()
-                                              .add(LoginWithAppleEvent());
-                                        }),
-                                  ),
-                                );
-                              }
-                            },
-                          ),
-                        ],
+                            FutureBuilder<bool>(
+                              future: apple.TheAppleSignIn.isAvailable(),
+                              builder: (context, snapshot) {
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return const CircularProgressIndicator
+                                      .adaptive();
+                                }
+                                if (!snapshot.hasData ||
+                                    (snapshot.data != true)) {
+                                  return Container();
+                                } else {
+                                  return Padding(
+                                    padding: const EdgeInsets.only(
+                                        right: 40.0, left: 40.0, bottom: 20),
+                                    child: ConstrainedBox(
+                                      constraints: BoxConstraints(
+                                          maxWidth: MediaQuery.of(context)
+                                                  .size
+                                                  .width /
+                                              1.5),
+                                      child: apple.AppleSignInButton(
+                                          cornerRadius: 25.0,
+                                          type: apple.ButtonType.signIn,
+                                          style: isDarkMode(context)
+                                              ? apple.ButtonStyle.white
+                                              : apple.ButtonStyle.black,
+                                          onPressed: () async {
+                                            await context
+                                                .read<LoadingCubit>()
+                                                .showLoading(
+                                                    context,
+                                                    'Logging in, Please wait...',
+                                                    false);
+                                            if (!mounted) return;
+                                            context
+                                                .read<AuthenticationBloc>()
+                                                .add(LoginWithAppleEvent());
+                                          }),
+                                    ),
+                                  );
+                                }
+                              },
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),

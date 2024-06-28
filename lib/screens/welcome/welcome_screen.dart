@@ -43,30 +43,30 @@ class WelcomeScreen extends StatelessWidget {
                       fit: BoxFit.cover,
                     ),
                   ),
-                  const Padding(
-                    padding: EdgeInsets.only(
+                   Padding(
+                    padding: const EdgeInsets.only(
                         left: 16, top: 32, right: 16, bottom: 8),
                     child: Text(
                       'Say Hello To Simple Pay!',
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                          color: colorPrimary,
-                          fontSize: 24.0,
+                          color: isDarkMode(context)?colorPrimaryLight:colorSecondary,
+                          fontSize: 20.0,
                           fontWeight: FontWeight.bold),
                     ),
                   ),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 40, vertical: 16),
+                   Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 16),
                     child: Text(
                       'Experience the future of financial management. SimplePay simplifies your financial life with cutting-edge tools and features.',
-                      style: TextStyle(fontSize: 18, color: colorGrey),
+                      style: TextStyle(fontSize: 16, color: isDarkMode(context)?Colors.grey:colorGrey),
                       textAlign: TextAlign.center,
                     ),
                   ),
                   Padding(
                     padding:
                         const EdgeInsets.only(right: 40.0, left: 40.0, top: 40),
-                    child: customBtn(
+                    child: CustomBtn(
                       onPressed: () =>
                           context.read<WelcomeBloc>().add(LoginPressed()),
                       text: 'Login',
@@ -75,7 +75,7 @@ class WelcomeScreen extends StatelessWidget {
                   Padding(
                     padding:
                         const EdgeInsets.only(right: 40.0, left: 40.0, top: 20),
-                    child: customBtn(
+                    child: CustomBtn(
                       backgroundColor: colorWhite,
                       textColor: colorPrimary,
                       onPressed: () =>

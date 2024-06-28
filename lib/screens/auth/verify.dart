@@ -95,7 +95,7 @@ class _VerifyScreenState extends State<VerifyScreen> {
                     onCompleted: (pin) => _verifyOTP(context, pin),
                   ),
                   const SizedBox(height: 20),
-                  customBtn(
+                  CustomBtn(
                     text: "Verify OTP",
                     onPressed: () => _verifyOTP(context, _otpController.text),
                   ),

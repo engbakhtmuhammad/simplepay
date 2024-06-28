@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 
 import '../utils/constants.dart';
@@ -206,6 +207,7 @@ InputDecoration getInputDecoration({
   required bool darkMode,
   required Color errorColor,
   Widget? prefixIcon,
+  required BuildContext context
 }) {
   return InputDecoration(
     constraints: const BoxConstraints(maxWidth: 720, minWidth: 200),
@@ -213,22 +215,23 @@ InputDecoration getInputDecoration({
     fillColor: darkMode ? Colors.black54 : colorWhite,
     hintText: hint,
     focusedBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(25.0),
-      borderSide: const BorderSide(color: colorPrimary, width: 2.0),
+      borderRadius: BorderRadius.circular(borderRadius),
+      borderSide: BorderSide(color: isDarkMode(context)?colorPrimaryLight:colorSecondary, width: 1.0),
     ),
     errorBorder: OutlineInputBorder(
       borderSide: BorderSide(color: errorColor),
-      borderRadius: BorderRadius.circular(25.0),
+      borderRadius: BorderRadius.circular(borderRadius),
     ),
     focusedErrorBorder: OutlineInputBorder(
       borderSide: BorderSide(color: errorColor),
-      borderRadius: BorderRadius.circular(25.0),
+      borderRadius: BorderRadius.circular(borderRadius),
     ),
     enabledBorder: OutlineInputBorder(
-      borderSide: BorderSide(color: Colors.grey.shade200),
-      borderRadius: BorderRadius.circular(25.0),
+      borderSide: const BorderSide(color: colorGrey),
+      borderRadius: BorderRadius.circular(borderRadius),
     ),
     prefixIcon: prefixIcon,
+    prefixIconColor: isDarkMode(context)?colorWhite:colorSecondary
   );
 }
 

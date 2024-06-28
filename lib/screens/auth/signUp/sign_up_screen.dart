@@ -27,7 +27,7 @@ class _SignUpState extends State<SignUpScreen> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   final GlobalKey<FormState> _key = GlobalKey();
-  String? firstName, lastName, email, password, confirmPassword,phone;
+  String? firstName, lastName, email, password, confirmPassword, phone;
   AutovalidateMode _validate = AutovalidateMode.disabled;
   bool acceptEULA = false;
 
@@ -69,8 +69,7 @@ class _SignUpState extends State<SignUpScreen> {
                             imageData: _imageData,
                             lastName: lastName,
                             firstName: firstName,
-                            phoneNumber: phone!
-                            ));
+                            phoneNumber: phone!));
                   } else if (state is SignUpFailureState) {
                     showSnackBar(context, state.errorMessage);
                   }
@@ -81,14 +80,18 @@ class _SignUpState extends State<SignUpScreen> {
               appBar: AppBar(
                 elevation: 0.0,
                 backgroundColor: Colors.transparent,
-                title: const Text("Create account"),
+                title: Text(
+                  "Create Account",
+                  style: TextStyle(
+                      color: isDarkMode(context) ? Colors.white : Colors.black),
+                ),
                 centerTitle: true,
                 iconTheme: IconThemeData(
                     color: isDarkMode(context) ? Colors.white : Colors.black),
               ),
               body: SingleChildScrollView(
                 padding:
-                    const EdgeInsets.only(left: 16.0, right: 16, bottom: 16),
+                    const EdgeInsets.symmetric(horizontal: horizontalPadding),
                 child: BlocBuilder<SignUpBloc, SignUpState>(
                   buildWhen: (old, current) =>
                       current is SignUpFailureState && old != current,
@@ -152,7 +155,9 @@ class _SignUpState extends State<SignUpScreen> {
                                   Positioned(
                                     right: 0,
                                     child: FloatingActionButton(
-                                      backgroundColor:  colorPrimary,
+                                      backgroundColor: isDarkMode(context)
+                                          ? colorPrimaryLight
+                                          : colorSecondary,
                                       mini: true,
                                       onPressed: () => _onCameraClick(context),
                                       child: Icon(
@@ -166,182 +171,177 @@ class _SignUpState extends State<SignUpScreen> {
                                 ],
                               ),
                             ),
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                  top: 16.0, right: 8.0, left: 8.0),
-                              child: TextFormField(
-                                textCapitalization: TextCapitalization.words,
-                                validator: validateName,
-                                style:
-                                    const TextStyle(height: 0.8, fontSize: 14.0),
-                                onSaved: (String? val) {
-                                  firstName = val;
-                                },
-                                textInputAction: TextInputAction.next,
-                                decoration: getInputDecoration(
-                                    hint: 'First Name',
-                                    prefixIcon: Icon(
-                                        Icons.person_2_rounded,
-                                        color: isDarkMode(context)
-                                            ? Colors.white
-                                            : colorSecondary,
-                                      ),
-                                    darkMode: isDarkMode(context),
-                                    errorColor: Theme.of(context).errorColor),
-                              ),
+                            const SizedBox(height: horizontalPadding),
+                            TextFormField(
+                              textCapitalization: TextCapitalization.words,
+                              validator: validateName,
+                              style: TextStyle(
+                                  height: 0.8,
+                                  fontSize: 14.0,
+                                  color: isDarkMode(context)
+                                      ? colorPrimaryLight
+                                      : colorSecondary),
+                              onSaved: (String? val) {
+                                firstName = val;
+                              },
+                              textInputAction: TextInputAction.next,
+                              decoration: getInputDecoration(
+                                  hint: 'First Name',
+                                  prefixIcon: const Icon(
+                                    Icons.person_2_rounded,
+                                  ),
+                                  darkMode: isDarkMode(context),
+                                  errorColor: Theme.of(context).errorColor,
+                                  context: context),
                             ),
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                  top: 16.0, right: 8.0, left: 8.0),
-                              child: TextFormField(
-                                textCapitalization: TextCapitalization.words,
-                                validator: validateName,
-                                style:
-                                    const TextStyle(height: 0.8, fontSize: 14.0),
-                                onSaved: (String? val) {
-                                  lastName = val;
-                                },
-                                textInputAction: TextInputAction.next,
-                                decoration: getInputDecoration(
-                                    hint: 'Last Name',
-                                    prefixIcon: Icon(
-                                        Icons.person_2_rounded,
-                                        color: isDarkMode(context)
-                                            ? Colors.white
-                                            : colorSecondary,
-                                      ),
-                                    darkMode: isDarkMode(context),
-                                    errorColor: Theme.of(context).errorColor),
-                              ),
+                            const SizedBox(height: verticalPadding),
+                            TextFormField(
+                              textCapitalization: TextCapitalization.words,
+                              validator: validateName,
+                              style: TextStyle(
+                                  height: 0.8,
+                                  fontSize: 14.0,
+                                  color: isDarkMode(context)
+                                      ? colorPrimaryLight
+                                      : colorSecondary),
+                              onSaved: (String? val) {
+                                lastName = val;
+                              },
+                              textInputAction: TextInputAction.next,
+                              decoration: getInputDecoration(
+                                  hint: 'Last Name',
+                                  prefixIcon: const Icon(
+                                    Icons.person_2_rounded,
+                                  ),
+                                  darkMode: isDarkMode(context),
+                                  errorColor: Theme.of(context).errorColor,
+                                  context: context),
                             ),
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                  top: 16.0, right: 8.0, left: 8.0),
-                              child: TextFormField(
-                                keyboardType: TextInputType.emailAddress,
-                                textInputAction: TextInputAction.next,
-                                validator: validateEmail,
-                                style:
-                                    const TextStyle(height: 0.8, fontSize: 14.0),
-                                onSaved: (String? val) {
-                                  email = val;
-                                },
-                                decoration: getInputDecoration(
-                                    hint: 'Email',
-                                    prefixIcon: Icon(
-                                        Icons.email,
-                                        color: isDarkMode(context)
-                                            ? Colors.white
-                                            : colorSecondary,
-                                      ),
-                                    darkMode: isDarkMode(context),
-                                    errorColor: Theme.of(context).errorColor),
-                              ),
+                            const SizedBox(height: verticalPadding),
+                            TextFormField(
+                              keyboardType: TextInputType.emailAddress,
+                              textInputAction: TextInputAction.next,
+                              validator: validateEmail,
+                              style: TextStyle(
+                                  height: 0.8,
+                                  fontSize: 14.0,
+                                  color: isDarkMode(context)
+                                      ? colorPrimaryLight
+                                      : colorSecondary),
+                              onSaved: (String? val) {
+                                email = val;
+                              },
+                              decoration: getInputDecoration(
+                                  hint: 'Email',
+                                  prefixIcon: const Icon(
+                                    Icons.email,
+                                  ),
+                                  darkMode: isDarkMode(context),
+                                  errorColor: Theme.of(context).errorColor,
+                                  context: context),
                             ),
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                  top: 16.0, right: 8.0, left: 8.0),
-                              child: TextFormField(
-                                obscureText: true,
-                                textInputAction: TextInputAction.next,
-                                controller: _passwordController,
-                                validator: validatePassword,
-                                onSaved: (String? val) {
-                                  password = val;
-                                },
-                                style:
-                                    const TextStyle(height: 0.8, fontSize: 14.0),
-                                cursorColor:  colorPrimary,
-                                decoration: getInputDecoration(
-                                    hint: 'Password',
-                                    prefixIcon: Icon(
-                                        Icons.lock,
-                                        color: isDarkMode(context)
-                                            ? Colors.white
-                                            : colorSecondary,
-                                      ),
-                                    darkMode: isDarkMode(context),
-                                    errorColor: Theme.of(context).errorColor),
-                              ),
+                            const SizedBox(height: verticalPadding),
+                            TextFormField(
+                              obscureText: true,
+                              textInputAction: TextInputAction.next,
+                              controller: _passwordController,
+                              validator: validatePassword,
+                              onSaved: (String? val) {
+                                password = val;
+                              },
+                              style: TextStyle(
+                                  height: 0.8,
+                                  fontSize: 14.0,
+                                  color: isDarkMode(context)
+                                      ? colorPrimaryLight
+                                      : colorSecondary),
+                              cursorColor: colorPrimary,
+                              decoration: getInputDecoration(
+                                  hint: 'Password',
+                                  prefixIcon: const Icon(
+                                    Icons.lock,
+                                  ),
+                                  darkMode: isDarkMode(context),
+                                  errorColor: Theme.of(context).errorColor,
+                                  context: context),
                             ),
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                  top: 16.0, right: 8.0, left: 8.0),
-                              child: TextFormField(
-                                textInputAction: TextInputAction.done,
-                                onFieldSubmitted: (_) =>
-                                    context.read<SignUpBloc>().add(
-                                          ValidateFieldsEvent(_key,
-                                              acceptEula: acceptEULA),
-                                        ),
-                                obscureText: true,
-                                validator: (val) => validateConfirmPassword(
-                                    _passwordController.text, val),
-                                onSaved: (String? val) {
-                                  confirmPassword = val;
-                                },
-                                style:
-                                    const TextStyle(height: 0.8, fontSize: 14.0),
-                                cursorColor:  colorPrimary,
-                                decoration: getInputDecoration(
-                                    hint: 'Confirm Password',
-                                    prefixIcon: Icon(
-                                        Icons.lock,
-                                        color: isDarkMode(context)
-                                            ? Colors.white
-                                            : colorSecondary,
+                            const SizedBox(height: verticalPadding),
+                            TextFormField(
+                              textInputAction: TextInputAction.done,
+                              onFieldSubmitted: (_) =>
+                                  context.read<SignUpBloc>().add(
+                                        ValidateFieldsEvent(_key,
+                                            acceptEula: acceptEULA),
                                       ),
-                                    darkMode: isDarkMode(context),
-                                    errorColor: Theme.of(context).errorColor),
-                              ),
+                              obscureText: true,
+                              validator: (val) => validateConfirmPassword(
+                                  _passwordController.text, val),
+                              onSaved: (String? val) {
+                                confirmPassword = val;
+                              },
+                              style: TextStyle(
+                                  height: 0.8,
+                                  fontSize: 14.0,
+                                  color: isDarkMode(context)
+                                      ? colorPrimaryLight
+                                      : colorSecondary),
+                              cursorColor: colorPrimary,
+                              decoration: getInputDecoration(
+                                  hint: 'Confirm Password',
+                                  prefixIcon: const Icon(
+                                    Icons.lock,
+                                  ),
+                                  darkMode: isDarkMode(context),
+                                  errorColor: Theme.of(context).errorColor,
+                                  context: context),
                             ),
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                  top: 16.0, right: 8.0, left: 8.0),
-                              child: TextFormField(
-                                textInputAction: TextInputAction.next,
-                                controller: _phoneController,
-                                validator: validatePhoneNumber,
-                                onSaved: (String? val) {
-                                  phone = val;
-                                },
-                                style:
-                                    const TextStyle(height: 0.8, fontSize: 14.0),
-                                cursorColor:  colorPrimary,
-                                decoration: getInputDecoration(
-                                    hint: '+92310448366',
-                                    prefixIcon: Icon(
-                                        Icons.phone,
-                                        color: isDarkMode(context)
-                                            ? Colors.white
-                                            : colorSecondary,
-                                      ),
-                                    darkMode: isDarkMode(context),
-                                    errorColor: Theme.of(context).errorColor),
-                              ),
+                            const SizedBox(height: verticalPadding),
+                            TextFormField(
+                              textInputAction: TextInputAction.next,
+                              controller: _phoneController,
+                              validator: validatePhoneNumber,
+                              onSaved: (String? val) {
+                                phone = val;
+                              },
+                              style: TextStyle(
+                                  height: 0.8,
+                                  fontSize: 14.0,
+                                  color: isDarkMode(context)
+                                      ? colorPrimaryLight
+                                      : colorSecondary),
+                              cursorColor: colorPrimary,
+                              decoration: getInputDecoration(
+                                  hint: '+92310448366',
+                                  prefixIcon: const Icon(
+                                    Icons.phone,
+                                  ),
+                                  darkMode: isDarkMode(context),
+                                  errorColor: Theme.of(context).errorColor,
+                                  context: context),
                             ),
-                            const SizedBox(height: 20,),
-                            customBtn(text: "Register",onPressed: () => context.read<SignUpBloc>().add(
-                                      ValidateFieldsEvent(_key,
-                                          acceptEula: acceptEULA),
-                                    ),),
-                            const SizedBox(height: 24),
+                            const SizedBox(height: verticalPadding),
                             ListTile(
                               trailing: BlocBuilder<SignUpBloc, SignUpState>(
                                 buildWhen: (old, current) =>
-                                    current is EulaToggleState && old != current,
+                                    current is EulaToggleState &&
+                                    old != current,
                                 builder: (context, state) {
                                   if (state is EulaToggleState) {
                                     acceptEULA = state.eulaAccepted;
                                   }
                                   return Checkbox(
+                                    checkColor: isDarkMode(context)
+                                        ? colorBlack
+                                        : colorGrey,
                                     onChanged: (value) =>
                                         context.read<SignUpBloc>().add(
                                               ToggleEulaCheckboxEvent(
                                                 eulaAccepted: value!,
                                               ),
                                             ),
-                                    activeColor:  colorPrimary,
+                                    activeColor: isDarkMode(context)
+                                        ? colorPrimaryLight
+                                        : colorSecondary,
                                     value: acceptEULA,
                                   );
                                 },
@@ -350,14 +350,19 @@ class _SignUpState extends State<SignUpScreen> {
                                 textAlign: TextAlign.left,
                                 text: TextSpan(
                                   children: [
-                                    const TextSpan(
+                                    TextSpan(
                                       text:
                                           'By creating an account you agree to our ',
-                                      style: TextStyle(color: colorGrey),
+                                      style: TextStyle(
+                                          color: isDarkMode(context)
+                                              ? Colors.grey
+                                              : colorGrey),
                                     ),
                                     TextSpan(
-                                      style: const TextStyle(
-                                        color: colorPrimary,
+                                      style: TextStyle(
+                                        color: isDarkMode(context)
+                                            ? colorPrimaryLight
+                                            : colorSecondary,
                                       ),
                                       text: 'Terms of Use',
                                       recognizer: TapGestureRecognizer()
@@ -373,6 +378,14 @@ class _SignUpState extends State<SignUpScreen> {
                                   ],
                                 ),
                               ),
+                            ),
+                            const SizedBox(height: verticalPadding),
+                            CustomBtn(
+                              text: "Register",
+                              onPressed: () => context.read<SignUpBloc>().add(
+                                    ValidateFieldsEvent(_key,
+                                        acceptEula: acceptEULA),
+                                  ),
                             ),
                           ],
                         ),

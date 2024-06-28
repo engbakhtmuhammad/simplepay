@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:simplepay/utils/constants.dart';
+import 'package:simplepay/widgets/custom_btn.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../../services/helper.dart';
@@ -55,7 +56,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                 Visibility(
                   visible: state.currentPageCount + 1 == widget.titles.length,
                   child: Padding(
-                    padding: const EdgeInsets.all(16.0),
+                    padding: const EdgeInsets.only(right: 16, bottom: 30),
                     child: Align(
                       alignment: Directionality.of(context) == TextDirection.ltr
                           ? Alignment.bottomRight
@@ -68,23 +69,15 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                                 context, const WelcomeScreen(), false);
                           }
                         },
-                        child: OutlinedButton(
-                          onPressed: () {
-                            context
-                                .read<AuthenticationBloc>()
-                                .add(FinishedOnBoardingEvent());
-                          },
-                          style: OutlinedButton.styleFrom(
-                              side: const BorderSide(color: colorBlack),
-                              shape: const StadiumBorder()),
-                          child: const Text(
-                            'Continue',
-                            style: TextStyle(
-                                fontSize: 14.0,
-                                color: colorBlack,
-                                fontWeight: FontWeight.bold),
-                          ),
+                        child: SizedBox(
+                          width: 120,
+                          child: CustomBtn(text: "Continue",onPressed: () {
+                              context
+                                  .read<AuthenticationBloc>()
+                                  .add(FinishedOnBoardingEvent());
+                            },),
                         ),
+                        
                       ),
                     ),
                   ),
@@ -97,7 +90,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                       controller: pageController,
                       count: widget.titles.length,
                       effect: ScrollingDotsEffect(
-                          activeDotColor: colorSecondary,
+                          activeDotColor: isDarkMode(context)?colorPrimaryLight: colorSecondary,
                           dotColor: colorGrey.withOpacity(.5),
                           dotWidth: 8,
                           dotHeight: 8,
@@ -141,15 +134,15 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
         const SizedBox(height: 40),
         Text(
           widget.title.toUpperCase(),
-          style: const TextStyle(
-              color: colorSecondary, fontSize: 18.0, fontWeight: FontWeight.bold),
+          style:  TextStyle(
+              color: isDarkMode(context)?colorPrimaryLight:colorSecondary, fontSize: 18.0, fontWeight: FontWeight.bold),
           textAlign: TextAlign.center,
         ),
         Padding(
           padding: const EdgeInsets.all(16.0),
           child: Text(
             widget.subtitle,
-            style: const TextStyle(color: colorGrey, fontSize: 14.0),
+            style:  TextStyle(color:  isDarkMode(context)?Colors.grey:colorGrey, fontSize: 14.0),
             textAlign: TextAlign.center,
           ),
         ),

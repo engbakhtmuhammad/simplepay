@@ -84,24 +84,21 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                                   .read<ResetPasswordCubit>()
                                   .checkValidField(_key),
                               onSaved: (val) => _emailAddress = val!,
-                              style: const TextStyle(fontSize: 18.0),
+                              style:  TextStyle(fontSize: 14.0,color: isDarkMode(context)?colorPrimaryLight:colorSecondary),
                               keyboardType: TextInputType.emailAddress,
                               cursorColor:  colorPrimary,
                               decoration: getInputDecoration(
                                   hint: 'Email',
-                                  prefixIcon: Icon(
+                                  prefixIcon: const Icon(
                                       Icons.mail,
-                                      color: isDarkMode(context)
-                                          ? Colors.white
-                                          : colorSecondary,
                                     ),
                                   darkMode: isDarkMode(context),
-                                  errorColor: Theme.of(context).errorColor),
+                                  errorColor: Theme.of(context).errorColor, context: context),
                             ),
                           ),
                           Padding(
                             padding: const EdgeInsets.only(top: 20,right: 24,left: 24,bottom: 40),
-                            child: customBtn(text: "Send Email",onPressed: () => context
+                            child: CustomBtn(text: "Send Email",onPressed: () => context
                                     .read<ResetPasswordCubit>()
                                     .checkValidField(_key),),
                           )
