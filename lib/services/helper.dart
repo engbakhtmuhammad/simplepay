@@ -79,12 +79,12 @@ showProgress(BuildContext context, String message, bool isDismissible) async {
   progressDialog.style(
       message: message,
       borderRadius: 10.0,
-      backgroundColor:  colorPrimary,
+      backgroundColor:  colorSecondary,
       progressWidget: Container(
         padding: const EdgeInsets.all(8.0),
         child: const CircularProgressIndicator(
           backgroundColor: Colors.white,
-          valueColor: AlwaysStoppedAnimation(colorPrimary),
+          valueColor: AlwaysStoppedAnimation(colorSecondary),
         ),
       ),
       elevation: 10.0,

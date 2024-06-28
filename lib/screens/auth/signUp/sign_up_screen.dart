@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:motion_toast/motion_toast.dart';
 import 'package:simplepay/widgets/custom_btn.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -49,10 +50,11 @@ class _SignUpState extends State<SignUpScreen> {
                     pushAndRemoveUntil(
                         context, HomeScreen(user: state.user!), false);
                   } else {
-                    showSnackBar(
-                        context,
-                        state.message ??
-                            'Couldn\'t sign up, Please try again.');
+                    MotionToast.error(
+                            title: const Text("Error"),
+                            description: Text(state.message ??
+                            'Couldn\'t sign up, Please try again.'))
+                        .show(context);
                   }
                 },
               ),
@@ -71,7 +73,10 @@ class _SignUpState extends State<SignUpScreen> {
                             firstName: firstName,
                             phoneNumber: phone!));
                   } else if (state is SignUpFailureState) {
-                    showSnackBar(context, state.errorMessage);
+                    MotionToast.error(
+                            title: const Text("Error"),
+                            description: Text(state.errorMessage))
+                        .show(context);
                   }
                 },
               ),

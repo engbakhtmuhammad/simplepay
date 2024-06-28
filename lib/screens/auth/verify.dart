@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:motion_toast/motion_toast.dart';
 import 'package:pinput/pinput.dart';
 import '../../models/user.dart';
 import '../../services/helper.dart';
@@ -38,13 +39,21 @@ class _VerifyScreenState extends State<VerifyScreen> {
         if (state.authState == AuthState.authenticated) {
           Navigator.pushAndRemoveUntil(
             context,
-            MaterialPageRoute(builder: (context) => HomeScreen(user: widget.user)),
+            MaterialPageRoute(
+                builder: (context) => HomeScreen(user: widget.user)),
             (route) => false,
           );
         } else if (state.authState == AuthState.unauthenticated) {
-          showSnackBar(context, state.message ?? 'Authentication failed.');
+          MotionToast.error(
+                  title: const Text("Error"),
+                  description: Text(state.message ?? 'Authentication failed.'))
+              .show(context);
         } else if (state.authState == AuthState.codeSent) {
           // Handle code sent state if needed
+          MotionToast.success(
+                  title: const Text("Success"),
+                  description: Text(state.message ?? 'Code Sent'))
+              .show(context);
         }
       },
       child: Scaffold(
@@ -71,17 +80,21 @@ class _VerifyScreenState extends State<VerifyScreen> {
                     height: 300,
                   ),
                   const SizedBox(height: 25),
-                  const Text(
+                  Text(
                     "2 Factor Authentication",
                     style: TextStyle(
                         fontSize: 22,
                         fontWeight: FontWeight.bold,
-                        color: colorSecondary),
+                        color: isDarkMode(context)
+                            ? colorPrimaryLight
+                            : colorSecondary),
                   ),
                   const SizedBox(height: 10),
                   Text(
                     "We need to verify your phone\n${widget.user.phoneNumber}",
-                    style: TextStyle(fontSize: 16, color: colorGrey),
+                    style: TextStyle(
+                        fontSize: 16,
+                        color: isDarkMode(context) ? Colors.grey : colorGrey),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 30),
@@ -114,5 +127,3 @@ class _VerifyScreenState extends State<VerifyScreen> {
     authBloc.add(VerifyOTPEvent(otp: otp));
   }
 }
-
-

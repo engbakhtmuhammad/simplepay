@@ -37,25 +37,22 @@ class _HomeState extends State<HomeScreen> {
       },
       child: Scaffold(
         drawer: Drawer(
+          backgroundColor: isDarkMode(context)?colorBlack:colorWhite,
           child: ListView(
             padding: EdgeInsets.zero,
             children: [
-              const DrawerHeader(
+               const DrawerHeader(
                 decoration: BoxDecoration(
-                  color: colorPrimary,
+                  color: colorSecondary,
                 ),
                 child: Text(
-                  'Drawer Header',
-                  style: TextStyle(color: Colors.white),
+                  'Drawer Header'
+                 ,style: TextStyle(color: colorWhite),
                 ),
               ),
               ListTile(
                 title: Text(
-                  'Logout',
-                  style: TextStyle(
-                      color: isDarkMode(context)
-                          ? Colors.grey.shade50
-                          : Colors.grey.shade900),
+                  'Logout',style: TextStyle(color: isDarkMode(context)?colorWhite:colorBlack),
                 ),
                 leading: Transform.rotate(
                   angle: pi / 1,
@@ -85,8 +82,8 @@ class _HomeState extends State<HomeScreen> {
               color: isDarkMode(context)
                   ? Colors.grey.shade50
                   : Colors.grey.shade900),
-          backgroundColor:
-              isDarkMode(context) ? Colors.grey.shade900 : Colors.grey.shade50,
+          backgroundColor: Colors.transparent,
+          elevation: 0,
           centerTitle: true,
         ),
         body: Center(
@@ -113,15 +110,15 @@ class _HomeState extends State<HomeScreen> {
                   : displayCircleImage(user.profilePictureURL, 80, false),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Text(user.fullName()),
+                child: Text(user.fullName(),style: TextStyle(color: isDarkMode(context)?colorWhite:colorBlack),),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Text(user.email),
+                child: Text(user.email,style: TextStyle(color: isDarkMode(context)?colorWhite:colorBlack),),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Text(user.userID),
+                child: Text(user.userID,style: TextStyle(color: isDarkMode(context)?colorWhite:colorBlack),),
               ),
             ],
           ),

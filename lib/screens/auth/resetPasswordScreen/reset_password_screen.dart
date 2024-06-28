@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:motion_toast/motion_toast.dart';
 import 'package:simplepay/widgets/custom_btn.dart';
 
 import '../../../services/helper.dart';
@@ -37,8 +38,12 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
               listener: (context, state) async {
                 if (state is ResetPasswordDone) {
                   context.read<LoadingCubit>().hideLoading();
-                  showSnackBar(context,
-                      'Reset password email has been sent, Please check your email.');
+                  MotionToast.success(
+                          title: const Text("Error"),
+                          description: const Text(
+                              'Reset password email has been sent, Please check your email.'))
+                      .show(context);
+
                   Navigator.pop(context);
                 } else if (state is ValidResetPasswordField) {
                   await context
@@ -49,7 +54,10 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                       .read<ResetPasswordCubit>()
                       .resetPassword(_emailAddress);
                 } else if (state is ResetPasswordFailureState) {
-                  showSnackBar(context, state.errorMessage);
+                  MotionToast.error(
+                          title: const Text("Error"),
+                          description: Text(state.errorMessage))
+                      .show(context);
                 }
               },
               buildWhen: (old, current) =>
@@ -68,11 +76,11 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           Image.asset(
-                              'assets/images/reset pass.png',
-                              width: 300,
-                              height: 300,
-                              fit: BoxFit.cover,
-                            ),
+                            'assets/images/reset pass.png',
+                            width: 300,
+                            height: 300,
+                            fit: BoxFit.cover,
+                          ),
                           Padding(
                             padding: const EdgeInsets.only(
                                 top: 32.0, right: 24.0, left: 24.0),
@@ -84,23 +92,32 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                                   .read<ResetPasswordCubit>()
                                   .checkValidField(_key),
                               onSaved: (val) => _emailAddress = val!,
-                              style:  TextStyle(fontSize: 14.0,color: isDarkMode(context)?colorPrimaryLight:colorSecondary),
+                              style: TextStyle(
+                                  fontSize: 14.0,
+                                  color: isDarkMode(context)
+                                      ? colorPrimaryLight
+                                      : colorSecondary),
                               keyboardType: TextInputType.emailAddress,
-                              cursorColor:  colorPrimary,
+                              cursorColor: colorPrimary,
                               decoration: getInputDecoration(
                                   hint: 'Email',
                                   prefixIcon: const Icon(
-                                      Icons.mail,
-                                    ),
+                                    Icons.mail,
+                                  ),
                                   darkMode: isDarkMode(context),
-                                  errorColor: Theme.of(context).errorColor, context: context),
+                                  errorColor: Theme.of(context).errorColor,
+                                  context: context),
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.only(top: 20,right: 24,left: 24,bottom: 40),
-                            child: CustomBtn(text: "Send Email",onPressed: () => context
-                                    .read<ResetPasswordCubit>()
-                                    .checkValidField(_key),),
+                            padding: const EdgeInsets.only(
+                                top: 20, right: 24, left: 24, bottom: 40),
+                            child: CustomBtn(
+                              text: "Send Email",
+                              onPressed: () => context
+                                  .read<ResetPasswordCubit>()
+                                  .checkValidField(_key),
+                            ),
                           )
                         ],
                       ),

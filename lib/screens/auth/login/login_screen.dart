@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:motion_toast/motion_toast.dart';
 import 'package:simplepay/screens/auth/verify.dart';
 import 'package:simplepay/widgets/custom_btn.dart';
 import 'package:the_apple_sign_in/the_apple_sign_in.dart' as apple;
@@ -50,8 +51,10 @@ class _LoginScreen extends State<LoginScreen> {
                         context, VerifyScreen(user: state.user!), false);
                   } else {
                     if (!mounted) return;
-                    showSnackBar(context,
-                        state.message ?? 'Couldn\'t login, Please try again.');
+                     MotionToast.error(
+                          title: const Text("Error"),
+                          description: Text( state.message ?? 'Couldn\'t login, Please try again.'))
+                      .show(context);
                   }
                 },
               ),
