@@ -65,3 +65,5 @@ class VerifyOTPEvent extends AuthenticationEvent {
 
   VerifyOTPEvent({required this.otp});
 }
+
+class ResendOTPEvent extends AuthenticationEvent {}

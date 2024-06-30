@@ -9,7 +9,6 @@ import '../../utils/constants.dart';
 import '../auth/authentication_bloc.dart';
 import '../home/home_screen.dart';
 import '../../widgets/custom_btn.dart';
-import 'login/login_screen.dart';
 
 class VerifyScreen extends StatefulWidget {
   final User user;
@@ -44,18 +43,18 @@ class _VerifyScreenState extends State<VerifyScreen> {
           _remainingSeconds--;
         } else {
           _timer.cancel();
-          _navigateToLoginScreen();
         }
       });
     });
   }
 
-  void _navigateToLoginScreen() {
-    Navigator.pushAndRemoveUntil(
-      context,
-      MaterialPageRoute(builder: (context) => LoginScreen()),
-      (route) => false,
-    );
+  void _resendCode(BuildContext context) {
+    final authBloc = context.read<AuthenticationBloc>();
+    authBloc.add(ResendOTPEvent());
+    setState(() {
+      _remainingSeconds = 60;
+    });
+    _startCountdownTimer();
   }
 
   @override
@@ -86,7 +85,6 @@ class _VerifyScreenState extends State<VerifyScreen> {
                   description: Text(state.message ?? 'Authentication failed.'))
               .show(context);
         } else if (state.authState == AuthState.codeSent) {
-          // Handle code sent state if needed
           MotionToast.success(
                   title: const Text("Success"),
                   description: Text(state.message ?? 'Code Sent'))
@@ -138,9 +136,6 @@ class _VerifyScreenState extends State<VerifyScreen> {
                   Pinput(
                     length: 6,
                     controller: _otpController,
-                    // defaultPinTheme: defaultPinTheme,
-                    // focusedPinTheme: focusedPinTheme,
-                    // submittedPinTheme: submittedPinTheme,
                     showCursor: true,
                     onCompleted: (pin) => _verifyOTP(context, pin),
                   ),
@@ -150,13 +145,26 @@ class _VerifyScreenState extends State<VerifyScreen> {
                     onPressed: () => _verifyOTP(context, _otpController.text),
                   ),
                   const SizedBox(height: 20),
-                  Text(
-                    'Time remaining: $_remainingSeconds seconds',
-                    style: const TextStyle(
-                      color: colorSecondary,
-                      fontSize: 16,
-                    ),
-                  ),
+                  _remainingSeconds > 0
+                      ? Text(
+                          'Time remaining: $_remainingSeconds seconds',
+                          style:  TextStyle(
+                            color: isDarkMode(context)?colorPrimaryLight:colorSecondary,
+                            fontSize: 16,
+                          ),
+                        )
+                      : GestureDetector(
+                          onTap: () => _resendCode(context),
+                          child:  Text(
+                            'Resend Code',
+                            style: TextStyle(
+                              color: isDarkMode(context)?colorPrimaryLight:colorSecondary,
+                              fontSize: 16,
+                              decoration: TextDecoration.underline,
+                              decorationColor: isDarkMode(context)?colorPrimaryLight:colorSecondary,
+                            ),
+                          ),
+                        ),
                   const SizedBox(height: 20),
                 ],
               ),

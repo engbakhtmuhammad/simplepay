@@ -53,7 +53,6 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
       }
     });
 
-
     on<LoginWithAppleEvent>((event, emit) async {
       dynamic result = await FireStoreUtils.loginWithApple();
       if (result != null && result is User) {
@@ -71,7 +70,6 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
     on<SendOTPEvent>((event, emit) async {
       await sendOTP(event.phoneNumber);
     });
-    
 
     on<VerifyOTPEvent>((event, emit) async {
       final credential = auth.PhoneAuthProvider.credential(
@@ -122,6 +120,10 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
       await FireStoreUtils.logout();
       user = null;
       emit(const AuthenticationState.unauthenticated());
+    });
+
+    on<ResendOTPEvent>((event, emit) async {
+      await sendOTP(user!.phoneNumber);
     });
   }
 
