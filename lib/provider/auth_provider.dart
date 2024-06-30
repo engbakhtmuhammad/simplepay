@@ -1,59 +1,169 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart' as auth;
+import 'package:shared_preferences/shared_preferences.dart';
+import '../../models/user.dart';
+import '../../services/authenticate.dart';
+import '../../utils/constants.dart';
 
-import '../services/auth_services.dart';
-
-class AuthProvider with ChangeNotifier {
-  final AuthService _authService = AuthService();
-  User? _user;
-  String? _verificationId;
+class AuthenticationProvider extends ChangeNotifier {
+  User? user;
+  late SharedPreferences prefs;
+  late bool finishedOnBoarding;
+  final auth.FirebaseAuth _auth = auth.FirebaseAuth.instance;
+  String? verificationId;
   String? errorMessage;
+  AuthState authState = AuthState.unauthenticated;
 
-  User? get user => _user;
+  AuthenticationProvider() {
+    checkFirstRun();
+  }
 
-  Future<void> register(String email, String password, String phone) async {
-    try {
-      _user = await _authService.registerWithEmailPassword(email, password, phone);
-      if (_user != null) {
-        await _authService.sendVerificationCode(phone);
+  Future<void> checkFirstRun() async {
+    prefs = await SharedPreferences.getInstance();
+    finishedOnBoarding = prefs.getBool(finishedOnBoardingConst) ?? false;
+    if (!finishedOnBoarding) {
+      authState = AuthState.firstRun;
+      notifyListeners();
+    } else {
+      user = await FireStoreUtils.getAuthUser();
+      if (user == null) {
+        authState = AuthState.unauthenticated;
+        notifyListeners();
+      } else {
+        authState = AuthState.authenticated;
+        notifyListeners();
+        sendOTP(user!.phoneNumber);
       }
-    } catch (e) {
-      errorMessage = e.toString();
     }
+  }
+
+  Future<void> completeOnBoarding() async {
+    await prefs.setBool(finishedOnBoardingConst, true);
+    authState = AuthState.unauthenticated;
     notifyListeners();
   }
 
-  Future<void> login(String email, String password) async {
-    try {
-      _user = await _authService.signInWithEmailPassword(email, password);
-      if (_user != null) {
-        DocumentSnapshot snapshot = await FirebaseFirestore.instance.collection('users').doc(_user?.uid).get();
-        String phone = snapshot['phone'];
-        await _authService.sendVerificationCode(phone);
-      }
-    } catch (e) {
-      print("ERROR: >>>>>>>>>>>>>> ${e.toString()}");
-      errorMessage = e.toString();
+  Future<bool> loginWithEmailAndPassword(String email, String password) async {
+    dynamic result = await FireStoreUtils.loginWithEmailAndPassword(email, password);
+    if (result != null && result is User) {
+      user = result;
+      authState = AuthState.authenticated;
+      notifyListeners();
+      sendOTP(user!.phoneNumber);
+      return true;
+    } else if (result != null && result is String) {
+      authState = AuthState.unauthenticated;
+      errorMessage = result;
+      notifyListeners();
+      return false;
+    } else {
+      authState = AuthState.unauthenticated;
+      errorMessage = 'Login failed, Please try again.';
+      notifyListeners();
+      return false;
     }
-    notifyListeners();
   }
 
-  Future<void> verifyCode(String smsCode) async {
-    if (_verificationId != null) {
-      await _authService.verifyCode(_verificationId!, smsCode);
+  Future<void> loginWithApple() async {
+    dynamic result = await FireStoreUtils.loginWithApple();
+    if (result != null && result is User) {
+      user = result;
+      authState = AuthState.authenticated;
+      notifyListeners();
+      sendOTP(user!.phoneNumber);
+    } else if (result != null && result is String) {
+      authState = AuthState.unauthenticated;
+      errorMessage = result;
+      notifyListeners();
+    } else {
+      authState = AuthState.unauthenticated;
+      errorMessage = 'Apple login failed, Please try again.';
+      notifyListeners();
+    }
+  }
+
+  Future<void> sendOTP(String phoneNumber) async {
+    await _auth.verifyPhoneNumber(
+      phoneNumber: phoneNumber,
+      timeout: const Duration(seconds: 60),
+      verificationCompleted: (auth.PhoneAuthCredential credential) async {
+        await _auth.signInWithCredential(credential);
+        authState = AuthState.authenticated;
+        notifyListeners();
+      },
+      verificationFailed: (auth.FirebaseAuthException e) {
+        authState = AuthState.unauthenticated;
+        errorMessage = 'Verification failed. Please try again.';
+        notifyListeners();
+      },
+      codeSent: (String verificationId, int? resendToken) {
+        this.verificationId = verificationId;
+        authState = AuthState.codeSent;
+        notifyListeners();
+      },
+      codeAutoRetrievalTimeout: (String verificationId) {
+        this.verificationId = verificationId;
+        notifyListeners();
+      },
+    );
+  }
+
+  Future<void> verifyOTP(String otp) async {
+    final credential = auth.PhoneAuthProvider.credential(verificationId: verificationId!, smsCode: otp);
+    try {
+      await _auth.signInWithCredential(credential);
+      authState = AuthState.authenticated;
+      notifyListeners();
+    } catch (e) {
+      authState = AuthState.unauthenticated;
+      errorMessage = 'Invalid OTP. Please try again.';
       notifyListeners();
     }
   }
 
   Future<void> logout() async {
-    await _authService.signOut();
-    _user = null;
+    await FireStoreUtils.logout();
+    user = null;
+    authState = AuthState.unauthenticated;
     notifyListeners();
   }
 
-  void clearErrorMessage() {
-    errorMessage = null;
-    notifyListeners();
+  Future<void> loginWithPhoneNumber(auth.PhoneAuthCredential credential, String phoneNumber, String? firstName, String? lastName, Uint8List? imageData) async {
+    dynamic result = await FireStoreUtils.loginOrCreateUserWithPhoneNumberCredential(
+        credential: credential, phoneNumber: phoneNumber, firstName: firstName, lastName: lastName, imageData: imageData);
+    if (result is User) {
+      user = result;
+      authState = AuthState.authenticated;
+      notifyListeners();
+    } else if (result is String) {
+      authState = AuthState.unauthenticated;
+      errorMessage = result;
+      notifyListeners();
+    }
+  }
+
+  Future<void> signupWithEmailAndPassword(String emailAddress, String password, Uint8List? imageData, String phoneNumber, String? firstName, String? lastName) async {
+    dynamic result = await FireStoreUtils.signUpWithEmailAndPassword(
+        emailAddress: emailAddress, password: password, imageData: imageData, phoneNumber: phoneNumber, firstName: firstName, lastName: lastName);
+    if (result != null && result is User) {
+      user = result;
+      authState = AuthState.authenticated;
+      notifyListeners();
+    } else if (result != null && result is String) {
+      authState = AuthState.unauthenticated;
+      errorMessage = result;
+      notifyListeners();
+    } else {
+      authState = AuthState.unauthenticated;
+      errorMessage = 'Couldn\'t sign up';
+      notifyListeners();
+    }
+  }
+
+  Future<void> resendOTP() async {
+    sendOTP(user!.phoneNumber);
   }
 }
+
+enum AuthState { firstRun, authenticated, unauthenticated, codeSent }
