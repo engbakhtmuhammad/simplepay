@@ -105,7 +105,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                                     Icons.mail,
                                   ),
                                   darkMode: isDarkMode(context),
-                                  errorColor: Theme.of(context).errorColor,
+                                  errorColor: colorError,
                                   context: context),
                             ),
                           ),

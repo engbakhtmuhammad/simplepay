@@ -7,7 +7,6 @@ import 'package:the_apple_sign_in/the_apple_sign_in.dart' as apple;
 
 import '../../../services/helper.dart';
 import '../../../utils/constants.dart';
-import '../../home/home_screen.dart';
 import '../../loading_cubit.dart';
 import '../authentication_bloc.dart';
 import '../resetPasswordScreen/reset_password_screen.dart';
@@ -116,7 +115,7 @@ class _LoginScreen extends State<LoginScreen> {
                                       Icons.mail,
                                     ),
                                     darkMode: isDarkMode(context),
-                                    errorColor: Theme.of(context).errorColor,
+                                    errorColor: colorError,
                                     context: context)),
                             const SizedBox(
                               height: 20,
@@ -137,7 +136,7 @@ class _LoginScreen extends State<LoginScreen> {
                               decoration: getInputDecoration(
                                 hint: 'Password',
                                 darkMode: isDarkMode(context),
-                                errorColor: Theme.of(context).errorColor,
+                                errorColor: colorError,
                                 prefixIcon: const Icon(
                                   Icons.lock,
                                 ),

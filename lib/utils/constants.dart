@@ -8,7 +8,7 @@ const facebookButtonColor = Color(0xFF415893);
 const colorWhite = Color(0xffF1F1F1);
 const colorBlack = Color(0xff1C1C1C);
 const colorGrey= Color(0xff808080);
-
+const colorError= Colors.red;
 
 const finishedOnBoardingConst = 'finishedOnBoarding';
 const usersCollection = 'users';

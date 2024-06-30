@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:motion_toast/motion_toast.dart';
@@ -8,6 +9,7 @@ import '../../utils/constants.dart';
 import '../auth/authentication_bloc.dart';
 import '../home/home_screen.dart';
 import '../../widgets/custom_btn.dart';
+import 'login/login_screen.dart';
 
 class VerifyScreen extends StatefulWidget {
   final User user;
@@ -20,6 +22,41 @@ class VerifyScreen extends StatefulWidget {
 
 class _VerifyScreenState extends State<VerifyScreen> {
   final TextEditingController _otpController = TextEditingController();
+  late Timer _timer;
+  int _remainingSeconds = 60;
+
+  @override
+  void initState() {
+    super.initState();
+    _startCountdownTimer();
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
+  }
+
+  void _startCountdownTimer() {
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      setState(() {
+        if (_remainingSeconds > 0) {
+          _remainingSeconds--;
+        } else {
+          _timer.cancel();
+          _navigateToLoginScreen();
+        }
+      });
+    });
+  }
+
+  void _navigateToLoginScreen() {
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => LoginScreen()),
+      (route) => false,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -111,6 +148,14 @@ class _VerifyScreenState extends State<VerifyScreen> {
                   CustomBtn(
                     text: "Verify OTP",
                     onPressed: () => _verifyOTP(context, _otpController.text),
+                  ),
+                  const SizedBox(height: 20),
+                  Text(
+                    'Time remaining: $_remainingSeconds seconds',
+                    style: const TextStyle(
+                      color: colorSecondary,
+                      fontSize: 16,
+                    ),
                   ),
                   const SizedBox(height: 20),
                 ],
