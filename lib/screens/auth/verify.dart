@@ -11,9 +11,10 @@ import '../home/home_screen.dart';
 import '../../widgets/custom_btn.dart';
 
 class VerifyScreen extends StatefulWidget {
-  final User? user;
+  static const String routeName = '/verify';
+  final User user;
 
-  const VerifyScreen({super.key, this.user});
+  const VerifyScreen({super.key, required this.user});
 
   @override
   State<VerifyScreen> createState() => _VerifyScreenState();
@@ -48,9 +49,9 @@ class _VerifyScreenState extends State<VerifyScreen> {
     });
   }
 
-  void _resendCode(BuildContext context) {
+  void _resendCode(BuildContext context,User user) {
     final authProvider = context.read<AuthenticationProvider>();
-    authProvider.resendOTP();
+    authProvider.sendOTP(user);
     setState(() {
       _remainingSeconds = 60;
     });
@@ -156,7 +157,7 @@ class _VerifyScreenState extends State<VerifyScreen> {
                             ),
                           )
                         : GestureDetector(
-                            onTap: () => _resendCode(context),
+                            onTap: () => _resendCode(context,widget.user),
                             child: Text(
                               'Resend Code',
                               style: TextStyle(

@@ -67,16 +67,14 @@ class SignUpProvider with ChangeNotifier {
     }
   }
 
-  void validateFields(
-    BuildContext context,
-  ) {
+  void validateFields(BuildContext context) {
     if (_key.currentState?.validate() ?? false) {
       if (acceptEULA) {
         _key.currentState!.save();
         AuthService authService =
             Provider.of<AuthService>(context, listen: false);
         authService
-            .registerWithEmailPassword(email!, password!, phone!)
+            .registerWithEmailPassword(email!, password!, phone!, firstName, lastName, _imageData)
             .then((user) {
           if (user != null) {
             // Account creation successful, navigate to login screen
@@ -105,25 +103,6 @@ class SignUpProvider with ChangeNotifier {
       _key.currentState!.validate(); // Trigger validation
     }
   }
-
-  // void validateFields(BuildContext context) {
-  //   if (_key.currentState?.validate() ?? false) {
-  //     if (acceptEULA) {
-  //       _key.currentState!.save();
-  //       notifyListeners();
-
-  //       // Add logic to trigger account creation
-  //     } else {
-  //       MotionToast.error(
-  //         title: const Text("Error"),
-  //         description: const Text('Please accept the EULA'),
-  //       ).show(context);
-  //     }
-  //   } else {
-  //     _validate = AutovalidateMode.onUserInteraction;
-  //     notifyListeners();
-  //   }
-  // }
 
   void toggleEulaCheckbox(bool value) {
     acceptEULA = value;

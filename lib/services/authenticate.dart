@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:simplepay/models/user.dart';
 import 'package:the_apple_sign_in/the_apple_sign_in.dart' as apple;
 
@@ -17,7 +16,9 @@ class FireStoreUtils {
     DocumentSnapshot<Map<String, dynamic>> userDocument =
         await firestore.collection(usersCollection).doc(uid).get();
     if (userDocument.data() != null && userDocument.exists) {
+      print(">>>>>>>>>>> User Data: ${userDocument.data()}");
       return User.fromJson(userDocument.data()!);
+      
     } else {
       return null;
     }

@@ -28,7 +28,7 @@ void main() async {
       ChangeNotifierProvider(create: (_) => WelcomeProvider()),
       ChangeNotifierProvider(create: (_) => OnBoardingProvider()),
       ChangeNotifierProvider(create: (_) => ResetPasswordProvider()),
-      Provider(create: (_) => LoadingCubit()), 
+      Provider(create: (_) => LoadingCubit()),
     ],
     child: const MyApp(),
   ));
@@ -110,8 +110,10 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
       theme: ThemeData(
         brightness: Brightness.light,
         scaffoldBackgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        appBarTheme: const AppBarTheme(systemOverlayStyle: SystemUiOverlayStyle.dark),
-        snackBarTheme: const SnackBarThemeData(contentTextStyle: TextStyle(color: Colors.white)),
+        appBarTheme:
+            const AppBarTheme(systemOverlayStyle: SystemUiOverlayStyle.dark),
+        snackBarTheme: const SnackBarThemeData(
+            contentTextStyle: TextStyle(color: Colors.white)),
         colorScheme: ColorScheme.fromSwatch().copyWith(
           secondary: colorPrimary,
           brightness: Brightness.light,
@@ -120,8 +122,10 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
       darkTheme: ThemeData(
         brightness: Brightness.dark,
         scaffoldBackgroundColor: Colors.grey.shade800,
-        appBarTheme: const AppBarTheme(systemOverlayStyle: SystemUiOverlayStyle.light),
-        snackBarTheme: const SnackBarThemeData(contentTextStyle: TextStyle(color: Colors.white)),
+        appBarTheme:
+            const AppBarTheme(systemOverlayStyle: SystemUiOverlayStyle.light),
+        snackBarTheme: const SnackBarThemeData(
+            contentTextStyle: TextStyle(color: Colors.white)),
         colorScheme: ColorScheme.fromSwatch().copyWith(
           secondary: colorPrimary,
           brightness: Brightness.dark,

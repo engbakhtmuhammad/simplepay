@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:motion_toast/motion_toast.dart';
 import 'package:provider/provider.dart';
-import 'package:simplepay/screens/auth/verify.dart';
 import 'package:simplepay/screens/home/home_screen.dart';
 import 'package:simplepay/screens/loading_cubit.dart';
 
+import '../../../models/user.dart';
 import '../../../provider/auth_provider.dart';
 import '../../../provider/login_provider.dart';
+import '../../../services/authenticate.dart';
 import '../../../services/helper.dart';
 import '../../../utils/constants.dart';
 import '../../../widgets/custom_btn.dart';
 import '../resetPasswordScreen/reset_password_screen.dart';
 import '../signUp/sign_up_screen.dart';
+import '../verify.dart';
 
 class LoginScreen extends StatelessWidget {
   static const String routeName = '/login';
@@ -103,12 +105,13 @@ class LoginScreen extends StatelessWidget {
                           child: Padding(
                             padding: const EdgeInsets.only(right: 16.0),
                             child: GestureDetector(
-                              onTap: () =>
-                                  push(context, ResetPasswordScreen()),
-                              child:  Text(
+                              onTap: () => push(context, ResetPasswordScreen()),
+                              child: Text(
                                 'Forgot Password?',
                                 style: TextStyle(
-                                    color: isDarkMode(context)?colorPrimaryLight:colorSecondary,
+                                    color: isDarkMode(context)
+                                        ? colorPrimaryLight
+                                        : colorSecondary,
                                     fontWeight: FontWeight.bold,
                                     fontSize: 14),
                               ),
@@ -139,10 +142,12 @@ class LoginScreen extends StatelessWidget {
                                 onTap: () {
                                   push(context, const SignUpScreen());
                                 },
-                                child:  Text(
+                                child: Text(
                                   ' Sign Up',
                                   style: TextStyle(
-                                      color: isDarkMode(context)?colorPrimaryLight:colorSecondary,
+                                      color: isDarkMode(context)
+                                          ? colorPrimaryLight
+                                          : colorSecondary,
                                       fontWeight: FontWeight.bold),
                                 ),
                               ),
@@ -161,29 +166,60 @@ class LoginScreen extends StatelessWidget {
     );
   }
 
-void _performLogin(BuildContext context, LoginProvider loginProvider, AuthenticationProvider authProvider) async {
-  if (loginProvider.validateLoginFields()) {
-    await context.read<LoadingCubit>().showLoading(context, 'Logging in, Please wait...', false);
+  void _performLogin(BuildContext context, LoginProvider loginProvider,
+      AuthenticationProvider authProvider) async {
+    if (loginProvider.validateLoginFields()) {
+      await context
+          .read<LoadingCubit>()
+          .showLoading(context, 'Logging in, Please wait...', false);
 
-    bool success = await authProvider.loginWithEmailAndPassword(loginProvider.email!, loginProvider.password!);
+      bool success = await authProvider.loginWithEmailAndPassword(
+          loginProvider.email!, loginProvider.password!);
+      print(">>>>>>>>>>> UID: ${authProvider.user!.userID}");
 
-    if (success) {
-      // Navigate to VerifyScreen on successful login
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => HomeScreen()));
-      // Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => VerifyScreen(user: authProvider.user!)));
-    } else {
-      // Show error message if login fails
-      MotionToast.error(
-        title: const Text("Error"),
-        description: Text(authProvider.errorMessage ?? 'Couldn\'t login, Please try again.'),
-      ).show(context);
+      if (success) {
+        print(">>>>>>>>>>>>>>> Successfully Login");
+
+        try {
+          // Fetch current user data from FirestoreUtils
+          User? currentUser =
+              await FireStoreUtils.getCurrentUser(authProvider.user!.userID);
+
+          if (currentUser != null) {
+            print(">>>>>>>>>>>>>>PhoneNo: ${currentUser.phoneNumber}");
+
+            // Send OTP after successful login
+            authProvider.sendOTP(currentUser);
+
+            Navigator.pushReplacementNamed(context, VerifyScreen.routeName,
+                arguments: currentUser);
+          } else {
+            // Handle case where currentUser is null
+            MotionToast.error(
+              title: const Text("Error"),
+              description: Text("User data not found."),
+            ).show(context);
+          }
+        } catch (e) {
+          print("Error fetching user data: $e");
+          MotionToast.error(
+            title: const Text("Error"),
+            description: Text("Failed to fetch user data."),
+          ).show(context);
+        }
+      } else {
+        // Show error message if login fails
+        MotionToast.error(
+          title: const Text("Error"),
+          description: Text(authProvider.errorMessage ??
+              'Couldn\'t login, Please try again.'),
+        ).show(context);
+      }
+
+      // Hide loading overlay after login attempt
+      await context.read<LoadingCubit>().hideLoading();
     }
-
-    // Hide loading overlay after login attempt
-    await context.read<LoadingCubit>().hideLoading();
   }
-}
-
 }
 
 class OTPVerificationWidget extends StatelessWidget {

@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -9,23 +11,52 @@ class AuthService with ChangeNotifier {
   bool _loading = false;
   bool get loading => _loading;
 
-  Future<User?> registerWithEmailPassword(String email, String password, String phone) async {
+  // Future<User?> registerWithEmailPassword(String email, String password, String phone, String? firstName, String? lastName, Uint8List? imageData) async {
+  //   try {
+  //     _loading = true;
+  //     notifyListeners();
+
+  //     UserCredential result = await _auth.createUserWithEmailAndPassword(email: email, password: password);
+  //     User? user = result.user;
+  //     await _firestore.collection('users').doc(user?.uid).set({'phone': phone});
+
+  //     _loading = false;
+  //     notifyListeners();
+
+  //     return user;
+  //   } catch (e) {
+  //     _loading = false;
+  //     notifyListeners();
+  //     print(e);
+  //     return null;
+  //   }
+  // }
+  Future<User?> registerWithEmailPassword(
+      String email, String password, String phone, String? firstName, String? lastName, Uint8List? imageData) async {
     try {
-      _loading = true;
-      notifyListeners();
+      UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
 
-      UserCredential result = await _auth.createUserWithEmailAndPassword(email: email, password: password);
-      User? user = result.user;
-      await _firestore.collection('users').doc(user?.uid).set({'phone': phone});
+      User? user = userCredential.user;
 
-      _loading = false;
-      notifyListeners();
+      if (user != null) {
+        // Save user data to Firestore
+        await _firestore.collection('users').doc(user.uid).set({
+          'firstName': firstName,
+          'lastName': lastName,
+          'email': email,
+          'phoneNumber': phone,
+          'profilePictureURL': imageData,
+          'userID': user.uid
+        });
 
-      return user;
+        return user;
+      }
+      return null;
     } catch (e) {
-      _loading = false;
-      notifyListeners();
-      print(e);
+      print('Error: $e');
       return null;
     }
   }
